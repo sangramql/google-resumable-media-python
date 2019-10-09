@@ -911,6 +911,15 @@ class Test_get_next_chunk(object):
         assert result1 == (len(data), b"", u"bytes */10")
         assert stream.tell() == len(data)
 
+    def test_success_zero_size(self):
+        data = b""
+        stream = io.BytesIO(data)
+        total_bytes = len(data)
+        chunk_size = 31
+        result0 = _upload.get_next_chunk(stream, chunk_size, total_bytes)
+        assert result0 == (0, b"", u"bytes */0")
+        assert stream.tell() == total_bytes
+
 
 class Test_get_content_range(object):
     def test_known_size(self):
